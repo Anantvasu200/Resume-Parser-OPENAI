@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Resume Parser</title>
+</head>
+<body>
+    <div class="relative isolate overflow-hidden bg-gradient-to-r from-cyan-50 to-blue-500">
+        <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+            <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:pt-8 lg:ml-10">
+                <img class="w-[30%] h-auto" width="2432" height="1442"
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/65/TPDDL_Logo.svg" alt="TPDDL_Logo">
+                <h1 class="mt-10 text-4xl font-bold tracking-tight text-black sm:text-5xl">RESUME AND COVER LETTER</h1>
+                <p class="mt-6 text-lg leading-8 text-indigo-700">Please ensure you upload your resume and cover letter
+                    (where applicable) in PDF (.pdf) format.</p>
+                <h3>Your resume/CV must not contain any information that is confidential or proprietary to a third party
+                    (including former employers and governments) and must not contain Confidential Supervisory
+                    Information. Please delete any such information from your resume/CV before submitting it to us.</h3>
+                <div class="mt-10 flex items-center gap-x-6">
+                    <form action="/process" method="post" enctype="multipart/form-data">
+                        <div class="mt-10 flex flex-col justify-start items-start sm:flex-row sm:items-center  gap-x-6">
+                            <button type="submit"
+                                class=" my-2 bg-blue-500 px-8 rounded-2xl py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Process</button>
+                            <input type="file" name="pdf_doc" id="pdf_doc" accept=".pdf" class=" drop-shadow-md bg-white/10 font-semibold leading-6 text-gray-900 border border-blue-300 py-2 px-4 rounded-2xl block w-full text-sm text-slate-500
+                                                        file:mr-4 file:py-2 file:px-4
+                                                        file:rounded-full file:border-0
+                                                        file:text-sm file:font-semibold
+                                                        file:bg-blue-50 file:text-blue-400
+                                                        hover:file:bg-blue-100" type="file">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div
+                class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-40 lg:max-w-none lg:flex-none xl:ml-32">
+                <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+                    <img src="./Roshini.png" alt="App screenshot" width="2432" height="1442" class="w-[15rem]">
+                </div>
+            </div>
+        </div>
+
+        <div class=" w-screen h-full pb-8">
+            <div class="flex flex-col justify-center items-center text-white">
+                <div class=" ">
+
+                    <div id="dictionaryValues" class="border border-1 border-white max-w-7xl p-8"></div>
+                    {% if data %}
+                    <script>
+                        function displayDictionaryValues(data) {
+                            var dictionaryValuesDiv = document.getElementById("dictionaryValues");
+                            var html = generateHTML(data);
+                            dictionaryValuesDiv.innerHTML = html;
+                        }
+
+                        function generateHTML(data) {
+                            var html = "";
+                            var index = 1;
+                            for (var key in data) {
+                                if (data.hasOwnProperty(key)) {
+                                    if (isFinite(key)) {
+                                        html += "<p><strong>" + (parseInt(key) + 1) + ":</strong> ";
+                                    } else {
+                                        html += "<p><strong>" + key + ":</strong> ";
+                                    }
+                                    if (typeof data[key] === 'object') {
+                                        html += generateHTML(data[key]);
+                                    } else {
+                                        html += data[key];
+                                    }
+                                    html += "</p>";
+                                    index++;
+                                }
+                            }
+                            return html;
+                        }
+                        displayDictionaryValues({{ data | tojson }});
+                    </script>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
